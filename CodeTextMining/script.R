@@ -1,30 +1,26 @@
 # **To start,** install the packages you need to mine text   
-#      You only need to do this step once.   
+#      You only need to do this step once. Please uncomment the next three lines, the first time you start this program! 
 
-#Needed <- c("tm", "SnowballC", "RColorBrewer", "ggplot2", "wordcloud", "biclust", "cluster", "igraph", "fpc")
-# Needed <- c("tm", "SnowballCC", "RColorBrewer", "ggplot2", "wordcloud", "biclust", "cluster", "igraph", "fpc")
-#install.packages(Needed, dependencies = TRUE)
-
-#install.packages("Rcampdf", repos = "http://datacube.wu.ac.at/", type = "source")
+# Needed <- c("NLP", "tm", "SnowballC", "RColorBrewer", "ggplot2", "wordcloud", "biclust","cluster", "igraph", "fpc")
+# install.packages(Needed, dependencies = TRUE)
+# install.packages("Rcampdf", repos = "http://datacube.wu.ac.at/", type = "source")
 
 # If you get the following message:   
 #       Update all/some/none? [a/s/n]:   
 #   enter "a" and press return   
-##########################################################################################
 
 ##########################################################################################
-#                                  Loading Texts                                         #
+#                                  Loading Documents                                     #
 ##########################################################################################      
 #
 #     Start by saving your text files in a folder titled:    "texts"
 #     This will be the "corpus" (body) of texts you are mining.   
-#  
-#     Next, choose the type of computer you have...
 
-######    
-# *On a PC*, save the folder to your *C: drive* and use the following code chunk:  
-######
-cname <- file.path("C:", "texts")
+# cname <- file.path("C:", "texts")
+# cname <- getwd()
+
+# cname <- file.path("./tests")
+cname <- getwd()
 cname
 dir(cname)
 ##########################################################################################
@@ -78,8 +74,6 @@ freq
 # This will identify all terms that appear frequently (in this case, 50 or more times).   
 findFreqTerms(dtm, lowfreq = 50) # Change "50" to whatever is most appropriate for your data.
 #
-#
-#   
 ### Plot Word Frequencies
 # **Plot words that appear at least 50 times.**   
 library(ggplot2)
@@ -113,7 +107,8 @@ wordcloud(names(freq), freq, max.words = 100, rot.per = 0.2, colors = dark2)
 dtms <- removeSparseTerms(dtm, 0.15) # This makes a matrix that is only 15% empty space.
 library(cluster)
 d <- dist(t(dtms), method = "euclidian") # First calculate distance between words
-fit <- hclust(d = d, method = "ward")
+#fit <- hclust(d = d, method = "ward.D2")
+fit <- hclust(d = d, method = "complete")
 plot.new()
 plot(fit, hang = -1)
 groups <- cutree(fit, k = 5) # "k=" defines the number of clusters you are using   
